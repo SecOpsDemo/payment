@@ -22,7 +22,7 @@ podTemplate(label: label, containers: [
   hostPathVolume(mountPath: "/home/jenkins/.helm", hostPath: "/home/jenkins/.helm")
 ]) {
   node(label) {
-    env.GOPATH="${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"
+    env.GOPATH="/home/jenkins/workspace/sockshop_payment_${BRANCH_NAME}"
     env.PATH="${GOPATH}/bin:$PATH"
 
     stage("Prepare") {
