@@ -63,6 +63,8 @@ podTemplate(label: label, containers: [
 
           sh 'CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ${WORKSPACE}/target/main github.com/SecOpsDemo/payment/cmd/paymentsvc'
 
+          sh 'sleep 100000'
+
           // dir(".") {
           //   sh '''
           //     go version && \
