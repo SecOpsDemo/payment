@@ -58,7 +58,7 @@ podTemplate(label: label, containers: [
           sh 'cp -r ${WORKSPACE}/* ${GOPATH}/src/github.com/SecOpsDemo/payment'
           sh 'cp -r ${WORKSPACE}/vendor/* ${GOPATH}/src'
 
-          go_path = "${GOPATH}"
+          go_path = sh 'echo ${GOPATH}'
           dir("${go_path}/src/github.com/SecOpsDemo/payment") {
             sh 'go get -u github.com/FiloSottile/gvt'
             sh 'gvt restore'
