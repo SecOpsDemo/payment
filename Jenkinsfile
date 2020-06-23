@@ -51,7 +51,7 @@ podTemplate(label: label, containers: [
           dir(".") {
             sh '''
               mkdir /target && \
-              cp . /go/src/github.com/SecOpsDemo/payment/ && \
+              cp -r . /go/src/github.com/SecOpsDemo/payment/ && \
               go get -u github.com/FiloSottile/gvt
             '''
           }
