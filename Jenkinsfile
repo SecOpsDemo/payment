@@ -15,7 +15,7 @@ properties([
 ])
 podTemplate(label: label, containers: [
   containerTemplate(name: "builder", image: "opsnowtools/valve-builder:v0.2.2", command: "cat", ttyEnabled: true, alwaysPullImage: true),
-  containerTemplate(name: "go", image: "golang:1.7", command: "cat", ttyEnabled: true)
+  containerTemplate(name: "golang", image: "golang:1.7", command: "cat", ttyEnabled: true)
 ], volumes: [
   hostPathVolume(mountPath: "/var/run/docker.sock", hostPath: "/var/run/docker.sock"),
   hostPathVolume(mountPath: "/home/jenkins/.draft", hostPath: "/home/jenkins/.draft"),
@@ -47,7 +47,7 @@ podTemplate(label: label, containers: [
       }
     }
     stage("Build") {
-      container("go") {
+      container("golang") {
         try {
           // butler.go_build() // FIXME
           
@@ -74,7 +74,7 @@ podTemplate(label: label, containers: [
       }
     }
     stage("Tests") {
-      container("go") {
+      container("golang") {
         try {
           // butler.go_test() // FIXME
           sh '''
