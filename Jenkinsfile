@@ -22,8 +22,8 @@ podTemplate(label: label, containers: [
   hostPathVolume(mountPath: "/home/jenkins/.helm", hostPath: "/home/jenkins/.helm")
 ]) {
   node(label) {
-    env.GOPATH="/home/jenkins/workspace/sockshop_payment_${BRANCH_NAME}"
-    env.PATH="${GOPATH}/bin:$PATH"
+    // env.GOPATH="/home/jenkins/workspace/sockshop_payment_${BRANCH_NAME}"
+    // env.PATH="${GOPATH}/bin:$PATH"
 
     stage("Prepare") {
       container("builder") {
@@ -51,20 +51,32 @@ podTemplate(label: label, containers: [
         try {
           // butler.go_build() // FIXME
           
-          dir(".") {
-            sh '''
-              go version && \
-              mkdir target && \
-              go get -u github.com/FiloSottile/gvt
-            '''
-          }
+          sh 'mkdir target'
+          sh 'cd ${GOPATH}/src'
+          sh 'mkdir -p ${GOPATH}/src/github.com/SecOpsDemo/payment'
 
-          dir("${GOPATH}/src/github.com/SecOpsDemo/payment") {
-            sh '''
-              gvt restore && \
-              CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o target/main github.com/SecOpsDemo/payment/cmd/paymentsvc
-            '''
-          }
+          sh 'cp -r ${WORKSPACE}/* ${GOPATH}/src/github.com/SecOpsDemo/payment'
+          sh 'cp -r ${WORKSPACE}/vendor/* ${GOPATH}/src'
+
+          sh 'cd ${GOPATH}/src/github.com/SecOpsDemo/payment'
+          
+          sh 'gvt restore'
+          sh 'CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ${WORKSPACE}/target/main github.com/SecOpsDemo/payment/cmd/paymentsvc'
+
+          // dir(".") {
+          //   sh '''
+          //     go version && \
+          //     mkdir target && \
+          //     go get -u github.com/FiloSottile/gvt
+          //   '''
+          // }
+
+          // dir("${GOPATH}/src/github.com/SecOpsDemo/payment") {
+          //   sh '''
+          //     gvt restore && \
+          //     CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o target/main github.com/SecOpsDemo/payment/cmd/paymentsvc
+          //   '''
+          // }
 
           butler.success(SLACK_TOKEN_DEV, "Build")
         } catch (e) {
