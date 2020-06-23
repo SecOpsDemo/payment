@@ -47,11 +47,14 @@ podTemplate(label: label, containers: [
       container("go") {
         try {
           // butler.go_build() // FIXME
-          sh '''
-            mkdir /target && \
-            cp . /go/src/github.com/SecOpsDemo/payment/ && \
-            go get -u github.com/FiloSottile/gvt
-          '''
+          
+          dir(".") {
+            sh '''
+              mkdir /target && \
+              cp . /go/src/github.com/SecOpsDemo/payment/ && \
+              go get -u github.com/FiloSottile/gvt
+            '''
+          }
 
           dir("/go/src/github.com/SecOpsDemo/payment") {
             sh '''
