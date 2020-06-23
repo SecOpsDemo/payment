@@ -22,6 +22,9 @@ podTemplate(label: label, containers: [
   hostPathVolume(mountPath: "/home/jenkins/.helm", hostPath: "/home/jenkins/.helm")
 ]) {
   node(label) {
+    env.GOPATH="${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}"
+    env.PATH="${GOPATH}/bin:$PATH"
+
     stage("Prepare") {
       container("builder") {
         butler.prepare(IMAGE_NAME)
@@ -50,17 +53,15 @@ podTemplate(label: label, containers: [
           
           dir(".") {
             sh '''
-              mkdir /target && \
-              mkdir -p /go/src/github.com/SecOpsDemo/payment && \
-              cp -r . /go/src/github.com/SecOpsDemo/payment/ && \
+              mkdir target && \
               go get -u github.com/FiloSottile/gvt
             '''
           }
 
-          dir("/go/src/github.com/SecOpsDemo/payment") {
+          dir("${GOPATH}/src/github.com/SecOpsDemo/payment") {
             sh '''
               gvt restore && \
-              CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /target/main github.com/SecOpsDemo/payment/cmd/paymentsvc
+              CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o target/main github.com/SecOpsDemo/payment/cmd/paymentsvc
             '''
           }
 
