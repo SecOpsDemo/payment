@@ -53,6 +53,7 @@ podTemplate(label: label, containers: [
           
           dir(".") {
             sh '''
+              go version && \
               mkdir target && \
               go get -u github.com/FiloSottile/gvt
             '''
