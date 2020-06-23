@@ -11,7 +11,7 @@ import (
 	"syscall"
 
 	"github.com/go-kit/kit/log"
-	"github.com/microservices-demo/payment"
+	"github.com/SecOpsDemo/payment"
 	stdopentracing "github.com/opentracing/opentracing-go"
 	zipkin "github.com/openzipkin/zipkin-go-opentracing"
 	"golang.org/x/net/context"

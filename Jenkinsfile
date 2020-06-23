@@ -61,9 +61,11 @@ podTemplate(label: label, containers: [
           sh 'go get -u github.com/FiloSottile/gvt'
           sh 'cd ${GOPATH}/src/github.com/SecOpsDemo/payment && gvt restore'
 
+          sh 'sleep 60'
+
           sh 'CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ${WORKSPACE}/target/main github.com/SecOpsDemo/payment/cmd/paymentsvc'
 
-          sh 'sleep 100000'
+          
 
           // dir(".") {
           //   sh '''
