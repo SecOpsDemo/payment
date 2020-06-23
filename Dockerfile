@@ -1,6 +1,6 @@
 # Dockerfile
 
-FROM golang:1.7
+FROM alpine:3.4
 
 RUN mkdir /app
 COPY /target/main /app/main
