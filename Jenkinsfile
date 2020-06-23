@@ -58,11 +58,21 @@ podTemplate(label: label, containers: [
           sh 'cp -r ${WORKSPACE}/* ${GOPATH}/src/github.com/SecOpsDemo/payment'
           sh 'cp -r ${WORKSPACE}/vendor/* ${GOPATH}/src'
 
-          sh 'cd ${GOPATH}/src/github.com/SecOpsDemo/payment'
+          dir("${GOPATH}/src/github.com/SecOpsDemo/payment") {
+            sh 'go get -u github.com/FiloSottile/gvt'
+            sh 'gvt restore'
+            sh 'CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ${WORKSPACE}/target/main github.com/SecOpsDemo/payment/cmd/paymentsvc'
+          }
+
+          // sh 'cd ${GOPATH}/src/github.com/SecOpsDemo/payment'
           
-          sh 'go get -u github.com/FiloSottile/gvt'
-          sh 'gvt restore'
-          sh 'CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ${WORKSPACE}/target/main github.com/SecOpsDemo/payment/cmd/paymentsvc'
+          // sh 'go get -u github.com/FiloSottile/gvt'
+          // sh 'gvt restore'
+
+          // sh 'CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o ${WORKSPACE}/target/main github.com/SecOpsDemo/payment/cmd/paymentsvc'
+
+
+          
 
           // dir(".") {
           //   sh '''
